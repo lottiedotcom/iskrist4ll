@@ -1,0 +1,17 @@
+{
+  "name": "nsfw-links-os",
+  "version": "1.0.0",
+  "description": "An interactive XP-style Linktree alternative",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "keywords": [
+    "linktree",
+    "portfolio",
+    "os",
+    "xp"
+  ],
+  "author": "Kitten",
+  "license": "ISC"
+}
