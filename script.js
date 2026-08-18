@@ -62,7 +62,7 @@ function openWindow(id) {
     
     if (id === 'window-game' && !gameActive) {
         initGame();
-        resetScreensaver(); // Resets screensaver to clear timeout
+        resetScreensaver(); 
     }
     
     trackClicks();
@@ -73,7 +73,7 @@ function closeWindow(id) {
     if (id === 'window-game') {
         gameActive = false;
         cancelAnimationFrame(gameLoop);
-        resetScreensaver(); // Restart screensaver timer when game closes
+        resetScreensaver(); 
     }
 }
 
@@ -201,8 +201,8 @@ setInterval(() => {
 
 // --- VERTICAL PLATFORMER MINI GAME ---
 let gameLoop;
-// Updated width and height to match the new CSS (150x150)
-let player = { x: 85, y: 150, width: 150, height: 150, vy: 0 };
+// Updated width and height to match the new massive CSS sizes (180x220)
+let player = { x: 70, y: 150, width: 180, height: 220, vy: 0 };
 let platforms = [];
 let gravity = 0.25; 
 let jumpPower = -6.5; 
@@ -228,17 +228,18 @@ function initGame() {
     score = 0;
     lives = 3;
     player.y = 150;
-    player.x = 85;
+    player.x = 70;
     player.vy = 0;
     
     updateHearts();
     document.getElementById('score-display').innerText = `Score: ${score}`;
     document.getElementById('game-over-screen').classList.add('hidden');
 
-    // Create starting platforms (centered for the 160px wide platform)
-    platforms.push({ x: 80, y: 380, element: null }); 
+    // Create starting platforms (centered for the 200px wide platform)
+    platforms.push({ x: 60, y: 380, element: null }); 
     for(let i = 0; i < 5; i++) {
-        platforms.push({ x: Math.random() * 160, y: i * 70, element: null });
+        // Keeps platforms within the 320px screen width
+        platforms.push({ x: Math.random() * 120, y: i * 70, element: null });
     }
     renderPlatforms();
     
@@ -256,16 +257,20 @@ function updateGame() {
     let targetX = mouseX - (player.width / 2);
     player.x += (targetX - player.x) * 0.08;
 
-    // Screen wrap
-    if(player.x < -75) player.x = 320;
-    if(player.x > 320) player.x = -75;
+    // Center-based Screen Wrap
+    let playerCenter = player.x + (player.width / 2);
+    if (playerCenter < 0) {
+        player.x = 320 - (player.width / 2);
+    } else if (playerCenter > 320) {
+        player.x = 0 - (player.width / 2);
+    }
 
-    // Platform Collision 
+    // Platform Collision (Updated padding for massive sprites)
     if (player.vy > 0) {
         platforms.forEach(plat => {
-            // Added 40px padding on the sides so her edges don't unfairly hit the platforms
-            if(player.x + player.width - 40 > plat.x && player.x + 40 < plat.x + 160 &&
-               player.y + player.height > plat.y && player.y + player.height < plat.y + 42 + player.vy) {
+            // Padding added so she only bounces if her core hits the platform
+            if(player.x + player.width - 60 > plat.x && player.x + 60 < plat.x + 200 &&
+               player.y + player.height > plat.y && player.y + player.height < plat.y + 50 + player.vy) {
                 player.vy = jumpPower; 
                 
                 plat.element.classList.add('platform-bounce');
@@ -296,8 +301,8 @@ function updateGame() {
         while(platforms.length < 6) {
             let lastY = platforms[platforms.length-1]?.y || 0;
             platforms.push({
-                x: Math.random() * 160, // Keep them within bounds
-                y: lastY - (Math.random() * 60 + 80), // Spread out a bit more vertically
+                x: Math.random() * 120, 
+                y: lastY - (Math.random() * 60 + 80), 
                 element: null
             });
         }
@@ -312,12 +317,12 @@ function updateGame() {
         if(lives > 0) {
             player.y = 150;
             player.vy = jumpPower;
-            platforms.push({ x: player.x, y: 300, element: null });
+            platforms.push({ x: player.x, y: 350, element: null });
             renderPlatforms();
         } else {
             gameActive = false;
             
-            // --- HIGH SCORE LOGIC ---
+            // High Score Logic
             const gameOverScreen = document.getElementById('game-over-screen');
             const msgDisplay = document.getElementById('game-over-msg');
             const highScoreDisplay = document.getElementById('high-score-display');
@@ -390,7 +395,6 @@ function resetScreensaver() {
     screensaver.classList.add('hidden');
     cancelAnimationFrame(animationFrame);
     
-    // SAFETY LOCK: Prevent screensaver from starting if the game is being played!
     if (gameActive) return; 
     
     screensaverTimeout = setTimeout(showScreensaver, 10000); 
@@ -415,4 +419,3 @@ function animateLogo() {
 ['mousemove', 'touchstart', 'click', 'scroll'].forEach(evt => {
     document.addEventListener(evt, resetScreensaver);
 });
-
