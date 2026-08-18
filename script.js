@@ -203,9 +203,9 @@ setInterval(() => {
 let gameLoop;
 let player = { x: 70, y: 160, width: 180, height: 220, vy: 0 };
 let platforms = [];
-let items = []; // Array to hold collectible items!
-let gravity = 0.09; // Slowed down for floaty feel
-let jumpPower = -3.9; // Adjusted jump power for 40% slower speed
+let items = [];
+let gravity = 0.09; 
+let jumpPower = -3.9; 
 let score = 0;
 let lives = 3;
 let gameActive = false;
@@ -253,10 +253,8 @@ function initGame() {
     document.getElementById('game-over-screen').classList.add('hidden');
     document.getElementById('start-overlay').classList.remove('hidden');
 
-    // Create starting platform right under her feet
     platforms.push({ x: 60, y: 380, element: null }); 
     
-    // Spread clouds further apart! (Reduced max clouds from 6 to 4, forced larger gap)
     for(let i = 1; i <= 3; i++) {
         platforms.push({ x: Math.random() * 120, y: 380 - (i * 75), element: null });
     }
@@ -275,7 +273,6 @@ function updateGame() {
         player.vy += gravity;
         player.y += player.vy;
 
-        // Smooth screen wrap logic
         let playerCenter = player.x + (player.width / 2);
         let dx = mouseX - playerCenter;
         
@@ -284,7 +281,6 @@ function updateGame() {
         
         player.x += dx * 0.08;
 
-        // Actual invisible screen boundary wrap
         let currentCenter = player.x + (player.width / 2);
         if (currentCenter < 0) {
             player.x += 320;
@@ -292,11 +288,18 @@ function updateGame() {
             player.x -= 320;
         }
 
-        // --- PLATFORM COLLISION ---
+        // --- PLATFORM COLLISION (TIGHTENED HITBOX!) ---
         if (player.vy > 0) {
+            // Recalculate center for precise hit detection
+            let preciseCenter = player.x + (player.width / 2); 
+            
             platforms.forEach(plat => {
-                if(player.x + player.width - 60 > plat.x && player.x + 60 < plat.x + 200 &&
-                   player.y + player.height > plat.y && player.y + player.height < plat.y + 50 + player.vy) {
+                // Her CENTER must land inside the solid 140px middle of the cloud
+                // Her FEET must be hitting the top 25px section of the cloud to bounce
+                if(preciseCenter > plat.x + 30 && preciseCenter < plat.x + 170 &&
+                   player.y + player.height > plat.y + 10 && 
+                   player.y + player.height < plat.y + 30 + player.vy) {
+                    
                     player.vy = jumpPower; 
                     
                     plat.element.classList.add('platform-bounce');
@@ -306,17 +309,17 @@ function updateGame() {
         }
         
         // --- ITEM COLLISION (LEVEL UP!) ---
+        let itemGrabCenter = player.x + (player.width / 2);
         items.forEach(item => {
             if (item.element && 
-                player.x + player.width - 50 > item.x && player.x + 50 < item.x + 40 &&
+                itemGrabCenter > item.x - 30 && itemGrabCenter < item.x + 70 &&
                 player.y + player.height > item.y && player.y < item.y + 40) {
                 
-                // SUPER JUMP!
-                player.vy = -7.2; // Adjusted to match the slower floaty gravity
-                score += 500; // Big score bonus
+                player.vy = -7.2; 
+                score += 500; 
                 
                 item.element.remove();
-                item.element = null; // Mark for cleanup
+                item.element = null; 
             }
         });
 
@@ -330,7 +333,6 @@ function updateGame() {
             platforms.forEach(plat => plat.y += diff);
             items.forEach(item => item.y += diff);
 
-            // Clean up off-screen platforms
             platforms = platforms.filter(plat => {
                 if(plat.y > 420) {
                     plat.element.remove();
@@ -339,7 +341,6 @@ function updateGame() {
                 return true;
             });
             
-            // Clean up collected or off-screen items
             items = items.filter(item => {
                 if (!item.element) return false;
                 if(item.y > 420) {
@@ -349,16 +350,14 @@ function updateGame() {
                 return true;
             });
 
-            // STRICTER CLOUD SPAWNING (Only 4 maximum to keep them thinned out!)
             while(platforms.length < 4) {
                 let lastY = platforms[platforms.length-1]?.y || 0;
                 
                 let newPlatX = Math.random() * 120;
-                let newPlatY = lastY - (Math.random() * 15 + 70); // Bigger mandatory gap!
+                let newPlatY = lastY - (Math.random() * 15 + 70); 
                 
                 platforms.push({ x: newPlatX, y: newPlatY, element: null });
                 
-                // 15% Chance to spawn a Level Up item on the new platform!
                 if (Math.random() < 0.15) {
                     items.push({ x: newPlatX + 80, y: newPlatY - 40, element: null });
                 }
@@ -377,6 +376,7 @@ function updateGame() {
                 
                 player.y = 160;
                 player.vy = 0;
+                // Spawns a guaranteed safe cloud directly under her so she doesn't fall again
                 platforms.push({ x: player.x - 10, y: 380, element: null });
                 renderGameObjects();
             } else {
@@ -496,4 +496,3 @@ function animateLogo() {
 ['mousemove', 'touchstart', 'click', 'scroll'].forEach(evt => {
     document.addEventListener(evt, resetScreensaver);
 });
-
