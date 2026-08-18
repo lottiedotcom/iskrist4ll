@@ -178,3 +178,51 @@ function animateLogo() {
     document.addEventListener(evt, resetScreensaver);
 });
 
+// --- DRAGGABLE WINDOWS ---
+const windows = document.querySelectorAll('.window');
+
+windows.forEach(win => {
+    const titleBar = win.querySelector('.title-bar');
+    if (!titleBar) return;
+
+    let isDragging = false;
+    let startX, startY, initialX, initialY;
+
+    // Mouse Events
+    titleBar.addEventListener('mousedown', dragStart);
+    document.addEventListener('mousemove', dragMove);
+    document.addEventListener('mouseup', dragEnd);
+
+    // Touch Events (for mobile)
+    titleBar.addEventListener('touchstart', (e) => dragStart(e.touches[0]), { passive: false });
+    document.addEventListener('touchmove', (e) => {
+        if (isDragging) e.preventDefault(); // Prevents scrolling while dragging
+        dragMove(e.touches[0]);
+    }, { passive: false });
+    document.addEventListener('touchend', dragEnd);
+
+    function dragStart(e) {
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        initialX = win.offsetLeft;
+        initialY = win.offsetTop;
+        
+        // Bring clicked window to the front
+        document.querySelectorAll('.window').forEach(w => w.style.zIndex = 100);
+        win.style.zIndex = 101;
+    }
+
+    function dragMove(e) {
+        if (!isDragging) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        win.style.left = `${initialX + dx}px`;
+        win.style.top = `${initialY + dy}px`;
+    }
+
+    function dragEnd() {
+        isDragging = false;
+    }
+});
+
