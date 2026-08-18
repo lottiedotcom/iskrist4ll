@@ -182,10 +182,11 @@
                     <!-- Game Elements -->
                     <div id="platforms-container"></div>
                     <div id="game-player-el" class="game-player"></div>
-                    <!-- Game Over Screen -->
+                    <!-- Game Over Screen with High Score -->
                     <div id="game-over-screen" class="hidden">
                         <h2>Game Over</h2>
-                        <p>You fell into the abyss!</p>
+                        <p id="game-over-msg">You fell into the abyss!</p>
+                        <p id="high-score-display" style="font-size: 14px; font-weight: bold; color: #ff99cc; margin-bottom: 15px;"></p>
                         <button class="xp-button" onclick="restartGame()">Play Again</button>
                     </div>
                 </div>
