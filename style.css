@@ -1,0 +1,166 @@
+/* Reset and Mobile Base */
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tahoma', sans-serif; }
+body, html { 
+    width: 100%; 
+    height: 100%; 
+    height: 100dvh; 
+    overflow: hidden; 
+    background-color: #000; 
+    touch-action: manipulation; 
+}
+.hidden { display: none !important; }
+
+/* Baby Pink Login Screen */
+#login-screen {
+    width: 100%; height: 100%;
+    background: #ffd1dc; /* Light baby pink */
+    display: flex; justify-content: center; align-items: center;
+    color: #4a4a4a; z-index: 1000; position: absolute; top: 0; left: 0;
+}
+.login-divider {
+    position: absolute; top: 50%; left: 0; width: 100%; height: 2px;
+    background: linear-gradient(to right, transparent, #ffffff, transparent);
+    transform: translateY(-50%); z-index: 1;
+}
+.login-box {
+    display: flex; align-items: center; gap: 15px; z-index: 2;
+    background: #ffb6c1; /* Slightly darker baby pink box */
+    padding: 20px; border-radius: 10px; border: 2px solid #ffffff;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+}
+#user-avatar { width: 70px; height: 70px; border-radius: 8px; border: 2px solid white; cursor: pointer; }
+.login-info h2 { font-weight: normal; font-size: 24px; margin-bottom: 2px; color: #ffffff; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
+.input-group { display: flex; gap: 5px; }
+#password-input { padding: 5px; border: 1px solid #ccc; border-radius: 3px; outline: none; width: 140px; }
+#login-btn { padding: 5px 10px; background: #ff99cc; color: white; border: 1px solid white; border-radius: 3px; font-weight: bold; cursor: pointer; }
+#login-error { color: #ff4d4d; font-size: 12px; margin-top: 5px; opacity: 0; font-weight: bold; }
+
+/* Desktop Environment */
+#desktop {
+    width: 100%; height: 100%;
+    background: url('pc.jpg') no-repeat center center;
+    background-size: cover; position: relative; display: flex; flex-direction: column;
+}
+
+/* Desktop Icons */
+.desktop-icons-container { 
+    padding: 10px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+    flex-wrap: wrap; 
+    height: calc(100% - 35px); 
+}
+.icon { width: 70px; text-align: center; color: white; text-shadow: 1px 1px 2px black; cursor: pointer; }
+.icon-img { width: 32px; height: 32px; margin-bottom: 3px; }
+.icon span { font-size: 11px; background: transparent; padding: 2px; border-radius: 3px; display: inline-block; line-height: 1.2; }
+.icon:active span { background: #ff99cc; }
+
+/* Pink Taskbar */
+#taskbar {
+    position: fixed; 
+    bottom: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 35px;
+    background: linear-gradient(to bottom, #ffb3d9 0%, #ffcce6 9%, #ffb3d9 18%, #ffb3d9 92%, #ff99cc 100%);
+    display: flex; justify-content: space-between; align-items: center; 
+    z-index: 9000;
+}
+#start-btn {
+    height: 100%; display: flex; align-items: center; padding: 0 15px 0 10px; color: white; 
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; font-style: italic; font-size: 18px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    background: linear-gradient(to bottom, #a3e6a3 0%, #8ae08a 50%, #70db70 100%); /* Kept classic start button green for contrast! */
+    cursor: pointer; border-right: 1px solid #70db70; border-radius: 0 10px 10px 0;
+    box-shadow: inset 1px 1px 3px rgba(255,255,255,0.4);
+}
+#start-logo { height: 20px; margin-right: 5px; filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.2)); }
+#clock {
+    color: white; padding: 0 15px; font-size: 12px; height: 100%; display: flex; align-items: center;
+    background: #ff99cc; border-left: 1px solid #ff80bf; cursor: pointer; box-shadow: inset 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Pink Start Menu */
+#start-menu {
+    position: fixed; 
+    bottom: 35px; 
+    left: 0; 
+    width: 250px; 
+    background: white;
+    border-top-right-radius: 5px; border: 1px solid #ffb3d9; display: flex; flex-direction: column; 
+    z-index: 9001;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+}
+.start-header {
+    background: linear-gradient(to bottom, #ffb3d9, #ff99cc); color: white; padding: 10px;
+    display: flex; align-items: center; gap: 10px; font-weight: bold; border-top-right-radius: 4px; text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+}
+.start-header img { width: 40px; height: 40px; border-radius: 5px; border: 2px solid white; }
+.start-body { background: white; padding: 5px; }
+.start-links { display: flex; flex-direction: column; }
+.start-links a { text-decoration: none; color: #333; padding: 10px; font-size: 13px; display: block; }
+.start-links a:active { background: #ffcce6; color: #333; }
+
+/* Windows */
+.window {
+    position: absolute; top: 5%; left: 5%; width: 90%; max-height: 80%; background: #fff0f5;
+    border: 3px solid #ff99cc; border-radius: 8px 8px 0 0; display: flex; flex-direction: column; z-index: 100;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+}
+.title-bar {
+    background: linear-gradient(to bottom, #ff80bf, #ffb3d9 10%, #ff99cc 50%, #ff80bf); 
+    color: white; font-weight: bold; text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+    padding: 3px 5px 3px 10px; display: flex; justify-content: space-between; align-items: center; font-size: 13px;
+    border-radius: 5px 5px 0 0;
+}
+.close-btn { 
+    background: #ff6666; color: white; border: 1px solid white; border-radius: 3px; 
+    padding: 2px 6px; font-weight: bold; box-shadow: inset 1px 1px 2px rgba(255,255,255,0.5); 
+}
+.window-content { padding: 10px; overflow-y: auto; flex: 1; min-height: 250px; background: white; border: 1px solid #ffb3d9; margin: 2px; }
+.no-padding { padding: 0; }
+
+/* Interactive Notepad Area */
+.notepad-area {
+    width: 100%; height: 100%; border: none; outline: none; resize: none;
+    font-family: 'Lucida Console', Courier, monospace; font-size: 14px; padding: 10px;
+}
+
+/* Center Content & Errors */
+.center-content { display: flex; justify-content: center; align-items: center; flex-direction: column; background: #fff0f5; }
+.error-text p { font-family: 'Tahoma', sans-serif; font-size: 13px; color: black; margin-bottom: 20px; }
+.xp-button {
+    padding: 5px 20px; border: 1px solid #ff99cc; border-radius: 3px;
+    background: linear-gradient(to bottom, #ffffff, #ffe6f0 50%, #ffcce6 51%, #ffb3d9);
+    cursor: pointer; font-family: 'Tahoma', sans-serif; font-size: 12px; color: #333;
+}
+.text-file { font-family: 'Lucida Console', Courier, monospace; font-size: 13px; color: #333; }
+
+/* Cybercore / Cutecore About Me Page */
+.cute-file { 
+    font-family: 'Comic Sans MS', cursive, sans-serif; 
+    text-align: center; 
+    color: #e0f8ff; 
+    background: linear-gradient(135deg, #0a1f2e, #0f384a); 
+    border: 2px solid #00ffcc; 
+    padding: 15px;
+    box-shadow: inset 0 0 10px rgba(0, 255, 204, 0.3);
+}
+.cute-file h2 {
+    color: #ff66cc; 
+    text-shadow: 1px 1px 4px rgba(255, 102, 204, 0.6);
+    margin-bottom: 10px;
+    font-size: 20px;
+    border-bottom: 2px dashed #b366ff; 
+    padding-bottom: 5px;
+}
+.cute-file p { font-size: 13px; line-height: 1.5; margin-bottom: 15px; color: #b3ffe6; }
+.obsessions-box { background: rgba(20, 40, 60, 0.6); border: 1px solid #b366ff; border-radius: 8px; padding: 10px; text-align: left; }
+.obsessions-box h3 { color: #00ffcc; font-size: 14px; text-align: center; margin-bottom: 8px; text-shadow: 0 0 3px rgba(0, 255, 204, 0.5); }
+.obsessions-box ul { list-style-type: none; padding: 0; font-size: 12px; color: #ffb3e6; }
+.obsessions-box li { margin-bottom: 5px; padding-left: 15px; position: relative; }
+.obsessions-box li::before { content: "✦"; color: #b366ff; position: absolute; left: 0; }
+
+/* Screensaver */
+#screensaver { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; background: black; z-index: 2000; overflow: hidden; }
+#bounce-logo { position: absolute; width: 80px; }
