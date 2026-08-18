@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kitten's Hub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Login / Age Gate -->
+    <div id="login-screen">
+        <div class="login-divider"></div>
+        <div class="login-box">
+            <img src="pfp.png" id="user-avatar" alt="Kittens Avatar" title="Click for password hint">
+            <div class="login-info">
+                <h2>Kitten (⁠◕⁠ᴗ⁠◕⁠✿⁠)</h2>
+                <p style="font-size: 11px; color: #ff6699; margin-bottom: 8px;">⚠ Contains 18+ Content. Enter password to verify.</p>
+                <div class="input-group">
+                    <input type="password" id="password-input" placeholder="Type your password">
+                    <button id="login-btn">➔</button>
+                </div>
+                <p id="login-error">Incorrect password.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Desktop Environment -->
+    <div id="desktop" class="hidden">
+        
+        <!-- DIRECT LINK DESKTOP ICONS -->
+        <div class="desktop-icons-container">
+            
+            <div class="icon" onclick="window.open('https://onlyfans.com/iskrist4ll', '_blank')">
+                <img src="https://win98icons.alexmeub.com/icons/png/key_padlock-0.png" class="icon-img" alt="OnlyFans">
+                <span>onlyfans 🎀</span>
+            </div>
+
+            <div class="icon" onclick="window.open('https://fansly.com/puppyc0w', '_blank')">
+                <img src="https://win98icons.alexmeub.com/icons/png/star_yellow-1.png" class="icon-img" alt="Fansly">
+                <span>fansly 💖</span>
+            </div>
+
+            <div class="icon" onclick="window.open('https://onlyfans.com/pocket.puff', '_blank')">
+                <img src="https://win98icons.alexmeub.com/icons/png/unlocked_padlock-0.png" class="icon-img" alt="Free OF">
+                <span>free page ☁️</span>
+            </div>
+
+            <div class="icon" onclick="window.open('https://x.com/iskrist4ll', '_blank')">
+                <img src="https://win98icons.alexmeub.com/icons/png/network_internet_pcs-0.png" class="icon-img" alt="X">
+                <span>twitter 🐦</span>
+            </div>
+
+            <div class="icon" onclick="window.open('https://www.facebook.com/NurseUmiushi', '_blank')">
+                <img src="https://win98icons.alexmeub.com/icons/png/address_book-0.png" class="icon-img" alt="Facebook">
+                <span>facebook 💙</span>
+            </div>
+
+            <div class="icon" onclick="window.open('https://www.instagram.com/iskrist4ll?igsh=ZHN0bWdhMnJ5Znlz', '_blank')">
+                <img src="https://win98icons.alexmeub.com/icons/png/camera3-1.png" class="icon-img" alt="Instagram">
+                <span>instagram 📷</span>
+            </div>
+
+            <div class="icon" onclick="window.open('https://www.snapchat.com/add/iskrist4ll?share_id=Akr7Hrtp_U0&locale=en-US', '_blank')">
+                <img src="https://win98icons.alexmeub.com/icons/png/msg_information-0.png" class="icon-img" alt="Snapchat">
+                <span>snapchat 👻</span>
+            </div>
+
+            <div class="icon" onclick="window.open('https://www.instagram.com/wispchie?igsh=NjY3bHM0ZmJwdGJh&igsi=NjY3bHM0ZmJwdGJh', '_blank')">
+                <img src="https://win98icons.alexmeub.com/icons/png/paint_file-0.png" class="icon-img" alt="Art Instagram">
+                <span>art insta 🎨</span>
+            </div>
+
+            <div class="icon" onclick="window.open('https://listography.com/NurseUmiushi?m=6404158689', '_blank')">
+                <img src="https://win98icons.alexmeub.com/icons/png/notepad_file-0.png" class="icon-img" alt="Listography">
+                <span>my lists 📝</span>
+            </div>
+
+            <div class="icon" onclick="window.open('https://MFCsha.re/Puppyc0w/askme/ask-me-your-kinky-questions', '_blank')">
+                <img src="https://win98icons.alexmeub.com/icons/png/help_book_big-0.png" class="icon-img" alt="Ask Me">
+                <span>ask me 💭</span>
+            </div>
+
+            <!-- NATIVE SYSTEM WINDOW ICONS -->
+            <div class="icon" onclick="openWindow('window-about')">
+                <img src="https://win98icons.alexmeub.com/icons/png/directory_explorer-5.png" class="icon-img" alt="About">
+                <span>about me 🌸</span>
+            </div>
+
+            <div class="icon" onclick="openWindow('window-notepad')">
+                <img src="https://win98icons.alexmeub.com/icons/png/notepad-1.png" class="icon-img" alt="Notepad">
+                <span>notepad 🎀</span>
+            </div>
+
+        </div>
+
+        <!-- Taskbar -->
+        <div id="taskbar">
+            <div id="start-btn">
+                <img src="https://win98icons.alexmeub.com/icons/png/windows_slanted-1.png" alt="Start" id="start-logo">
+                <span>start</span>
+            </div>
+            <div id="clock">12:00 PM</div>
+        </div>
+
+        <!-- Start Menu -->
+        <div id="start-menu" class="hidden">
+            <div class="start-header">
+                <img src="pfp.png" alt="Kitten">
+                <span>Kitten (⁠ ⁠ꈍ⁠ᴗ⁠ꈍ⁠)</span>
+            </div>
+            <div class="start-body">
+                <div class="start-links">
+                    <a href="https://toyhou.se/iskrist4ll" target="_blank">🧸 Toyhouse</a>
+                    <a href="YOUR_KOFI_LINK_HERE" target="_blank">☕ Ko-fi</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- WINDOW: About -->
+        <div class="window hidden" id="window-about">
+            <div class="title-bar">
+                <span>about_me.exe</span>
+                <button class="close-btn" onclick="closeWindow('window-about')">X</button>
+            </div>
+            <div class="window-content cute-file">
+                <h2>Hi, I'm Kitten! ✧˖°</h2>
+                <p>Welcome to my private server. I'm a digital creator, model, and contortionist who thrives entirely on an overnight schedule. When I'm not twisting into impossible shapes for the camera, you can find me coding cutecore UI tools, gardening and taming my indoor jungle of pothos, ZZ plants, and teardrop peperomias, or trying to keep my cat Sammie from walking across my keyboard during late-night sessions.</p>
+                <div class="obsessions-box">
+                    <h3>✧ Current Obsessions ✧</h3>
+                    <ul>
+                        <li>🔞 ❀˖° Sharing my explicit, unhinged, and playful sides</li>
+                        <li>⊹ ࣪ ˖🎧 Deep flexibility and contortion training</li>
+                        <li>˚ ༘ .˚🌱୭ ˚. Late-night plant propagation</li>
+                        <li>๋࣭ ⭑💻 Designing weirdcore/cutecore interfaces</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- WINDOW: Interactive Notepad -->
+        <div class="window hidden" id="window-notepad">
+            <div class="title-bar">
+                <span>untitled - notepad</span>
+                <button class="close-btn" onclick="closeWindow('window-notepad')">X</button>
+            </div>
+            <div class="window-content no-padding">
+                <textarea class="notepad-area" placeholder="Type here..."></textarea>
+            </div>
+        </div>
+
+        <!-- Liminal Error Message -->
+        <div class="window hidden" id="error-message">
+            <div class="title-bar">
+                <span>Alert</span>
+                <button class="close-btn" onclick="closeWindow('error-message')">X</button>
+            </div>
+            <div class="window-content center-content error-text">
+                <p id="error-text">You have been here before.</p>
+                <button class="xp-button" onclick="closeWindow('error-message')">OK</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Screensaver -->
+    <div id="screensaver" class="hidden">
+        <img src="sv.gif" id="bounce-logo" alt="screensaver">
+    </div>
+
+    <!-- Click Sound -->
+    <audio id="ui-click-sound" src="ui.mp3" preload="auto"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
