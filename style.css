@@ -199,7 +199,6 @@ body, html {
 #game-over-screen h2 { color: #ff99cc; margin-bottom: 10px; font-family: 'Tahoma', sans-serif; font-size: 24px; }
 #game-over-screen p { font-size: 14px; margin-bottom: 10px; }
 
-/* New Start Overlay */
 #start-overlay {
     position: absolute; top: 40%; left: 0; width: 100%;
     text-align: center; color: #ff99cc; font-weight: bold;
@@ -227,6 +226,21 @@ body, html {
 }
 .platform-bounce {
     transform: scaleY(0.7) translateY(4px);
+}
+
+/* New Power Up Items */
+.game-item {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: url('item.png') no-repeat center center;
+    background-size: contain;
+    z-index: 6;
+    animation: floatItem 1s infinite alternate ease-in-out;
+}
+@keyframes floatItem {
+    from { transform: translateY(0px) scale(0.95); }
+    to { transform: translateY(-8px) scale(1.05); }
 }
 
 /* Screensaver */
