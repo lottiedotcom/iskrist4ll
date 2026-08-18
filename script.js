@@ -204,8 +204,8 @@ let gameLoop;
 let player = { x: 70, y: 160, width: 180, height: 220, vy: 0 };
 let platforms = [];
 let items = []; // Array to hold collectible items!
-let gravity = 0.25; 
-let jumpPower = -6.5; 
+let gravity = 0.09; // Slowed down for floaty feel
+let jumpPower = -3.9; // Adjusted jump power for 40% slower speed
 let score = 0;
 let lives = 3;
 let gameActive = false;
@@ -275,8 +275,7 @@ function updateGame() {
         player.vy += gravity;
         player.y += player.vy;
 
-        // NEW MATHEMATICAL FIX FOR THE "ZOOMING" WRAP! 
-        // This makes her move smoothly through the border instead of shooting across the screen.
+        // Smooth screen wrap logic
         let playerCenter = player.x + (player.width / 2);
         let dx = mouseX - playerCenter;
         
@@ -313,7 +312,7 @@ function updateGame() {
                 player.y + player.height > item.y && player.y < item.y + 40) {
                 
                 // SUPER JUMP!
-                player.vy = -12; 
+                player.vy = -7.2; // Adjusted to match the slower floaty gravity
                 score += 500; // Big score bonus
                 
                 item.element.remove();
