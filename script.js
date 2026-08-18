@@ -203,12 +203,13 @@ setInterval(() => {
 let gameLoop;
 let player = { x: 70, y: 160, width: 180, height: 220, vy: 0 };
 let platforms = [];
+let items = []; // Array to hold collectible items!
 let gravity = 0.25; 
 let jumpPower = -6.5; 
 let score = 0;
 let lives = 3;
 let gameActive = false;
-let gameStarted = false; // New state to pause until clicked!
+let gameStarted = false; 
 let mouseX = 160;
 
 const gameContainer = document.getElementById('game-container');
@@ -220,7 +221,7 @@ gameContainer.addEventListener('touchstart', startGameHandler, {passive: true});
 function startGameHandler(e) {
     if (gameActive && !gameStarted) {
         gameStarted = true;
-        player.vy = jumpPower; // Triggers the very first jump!
+        player.vy = jumpPower; 
         document.getElementById('start-overlay').classList.add('hidden');
     }
 }
@@ -237,11 +238,12 @@ gameContainer.addEventListener('touchmove', (e) => {
 
 function initGame() {
     platforms.forEach(p => { if(p.element) p.element.remove(); });
+    items.forEach(i => { if(i.element) i.element.remove(); });
     platforms = [];
+    items = [];
     score = 0;
     lives = 3;
     
-    // Position her so her feet (160 + 220 = 380) perfectly touch the bottom cloud (y = 380)
     player.y = 160; 
     player.x = 70;
     player.vy = 0;
@@ -254,11 +256,11 @@ function initGame() {
     // Create starting platform right under her feet
     platforms.push({ x: 60, y: 380, element: null }); 
     
-    // Create initial safe vertical gaps (Max gap is 60px so she never misses)
-    for(let i = 1; i <= 5; i++) {
-        platforms.push({ x: Math.random() * 120, y: 380 - (i * 60), element: null });
+    // Spread clouds further apart! (Reduced max clouds from 6 to 4, forced larger gap)
+    for(let i = 1; i <= 3; i++) {
+        platforms.push({ x: Math.random() * 120, y: 380 - (i * 75), element: null });
     }
-    renderPlatforms();
+    renderGameObjects();
     
     gameActive = true;
     gameStarted = false; 
@@ -273,18 +275,25 @@ function updateGame() {
         player.vy += gravity;
         player.y += player.vy;
 
-        let targetX = mouseX - (player.width / 2);
-        player.x += (targetX - player.x) * 0.08;
-
-        // Center-based Screen Wrap
+        // NEW MATHEMATICAL FIX FOR THE "ZOOMING" WRAP! 
+        // This makes her move smoothly through the border instead of shooting across the screen.
         let playerCenter = player.x + (player.width / 2);
-        if (playerCenter < 0) {
-            player.x = 320 - (player.width / 2);
-        } else if (playerCenter > 320) {
-            player.x = 0 - (player.width / 2);
+        let dx = mouseX - playerCenter;
+        
+        if (dx > 160) dx -= 320;
+        if (dx < -160) dx += 320;
+        
+        player.x += dx * 0.08;
+
+        // Actual invisible screen boundary wrap
+        let currentCenter = player.x + (player.width / 2);
+        if (currentCenter < 0) {
+            player.x += 320;
+        } else if (currentCenter > 320) {
+            player.x -= 320;
         }
 
-        // Platform Collision 
+        // --- PLATFORM COLLISION ---
         if (player.vy > 0) {
             platforms.forEach(plat => {
                 if(player.x + player.width - 60 > plat.x && player.x + 60 < plat.x + 200 &&
@@ -296,18 +305,33 @@ function updateGame() {
                 }
             });
         }
+        
+        // --- ITEM COLLISION (LEVEL UP!) ---
+        items.forEach(item => {
+            if (item.element && 
+                player.x + player.width - 50 > item.x && player.x + 50 < item.x + 40 &&
+                player.y + player.height > item.y && player.y < item.y + 40) {
+                
+                // SUPER JUMP!
+                player.vy = -12; 
+                score += 500; // Big score bonus
+                
+                item.element.remove();
+                item.element = null; // Mark for cleanup
+            }
+        });
 
-        // Camera scrolling
+        // --- CAMERA SCROLLING & SPAWNING ---
         if (player.y < 150) {
             let diff = 150 - player.y;
             player.y = 150;
             score += Math.floor(diff);
             document.getElementById('score-display').innerText = `Score: ${score}`;
             
-            platforms.forEach(plat => {
-                plat.y += diff;
-            });
+            platforms.forEach(plat => plat.y += diff);
+            items.forEach(item => item.y += diff);
 
+            // Clean up off-screen platforms
             platforms = platforms.filter(plat => {
                 if(plat.y > 420) {
                     plat.element.remove();
@@ -315,36 +339,50 @@ function updateGame() {
                 }
                 return true;
             });
+            
+            // Clean up collected or off-screen items
+            items = items.filter(item => {
+                if (!item.element) return false;
+                if(item.y > 420) {
+                    item.element.remove();
+                    return false;
+                }
+                return true;
+            });
 
-            // FIXED GAP: Ensures new clouds spawn close enough to reach (gap between 40px and 70px)
-            while(platforms.length < 6) {
+            // STRICTER CLOUD SPAWNING (Only 4 maximum to keep them thinned out!)
+            while(platforms.length < 4) {
                 let lastY = platforms[platforms.length-1]?.y || 0;
-                platforms.push({
-                    x: Math.random() * 120, 
-                    y: lastY - (Math.random() * 30 + 40), 
-                    element: null
-                });
+                
+                let newPlatX = Math.random() * 120;
+                let newPlatY = lastY - (Math.random() * 15 + 70); // Bigger mandatory gap!
+                
+                platforms.push({ x: newPlatX, y: newPlatY, element: null });
+                
+                // 15% Chance to spawn a Level Up item on the new platform!
+                if (Math.random() < 0.15) {
+                    items.push({ x: newPlatX + 80, y: newPlatY - 40, element: null });
+                }
             }
-            renderPlatforms();
+            renderGameObjects();
         }
 
-        // Fall logic
+        // --- FALL LOGIC ---
         if (player.y > 420) {
             lives--;
             updateHearts();
             
             if(lives > 0) {
-                gameStarted = false; // Pause again so you have to click to respawn jump
+                gameStarted = false; 
                 document.getElementById('start-overlay').classList.remove('hidden');
                 
                 player.y = 160;
                 player.vy = 0;
                 platforms.push({ x: player.x - 10, y: 380, element: null });
-                renderPlatforms();
+                renderGameObjects();
             } else {
                 gameActive = false;
                 
-                // High Score Logic
                 const gameOverScreen = document.getElementById('game-over-screen');
                 const msgDisplay = document.getElementById('game-over-msg');
                 const highScoreDisplay = document.getElementById('high-score-display');
@@ -365,7 +403,7 @@ function updateGame() {
         }
     }
 
-    // Render DOM positions (Happens whether started or not so she is visible standing still!)
+    // Render DOM positions
     const playerEl = document.getElementById('game-player-el');
     playerEl.style.left = player.x + 'px';
     playerEl.style.top = player.y + 'px';
@@ -376,11 +414,18 @@ function updateGame() {
             plat.element.style.left = plat.x + 'px';
         }
     });
+    
+    items.forEach(item => {
+        if(item.element) {
+            item.element.style.top = item.y + 'px';
+            item.element.style.left = item.x + 'px';
+        }
+    });
 
     gameLoop = requestAnimationFrame(updateGame);
 }
 
-function renderPlatforms() {
+function renderGameObjects() {
     const platContainer = document.getElementById('platforms-container');
     platforms.forEach(plat => {
         if(!plat.element) {
@@ -388,6 +433,16 @@ function renderPlatforms() {
             el.className = 'game-platform';
             platContainer.appendChild(el);
             plat.element = el;
+        }
+    });
+    
+    const itemContainer = document.getElementById('items-container');
+    items.forEach(item => {
+        if(!item.element) {
+            let el = document.createElement('div');
+            el.className = 'game-item';
+            itemContainer.appendChild(el);
+            item.element = el;
         }
     });
 }
