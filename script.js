@@ -200,10 +200,11 @@ setInterval(() => {
 
 // --- VERTICAL PLATFORMER MINI GAME ---
 let gameLoop;
-let player = { x: 144, y: 300, width: 32, height: 32, vy: 0 };
+// Updated width and height to match the new CSS (50x50)
+let player = { x: 144, y: 300, width: 50, height: 50, vy: 0 };
 let platforms = [];
-let gravity = 0.4;
-let jumpPower = -8;
+let gravity = 0.25; // Lowered gravity to fall slower
+let jumpPower = -6.5; // Lowered jump power for a floatier jump
 let score = 0;
 let lives = 3;
 let gameActive = false;
@@ -397,3 +398,4 @@ function animateLogo() {
 ['mousemove', 'touchstart', 'click', 'scroll'].forEach(evt => {
     document.addEventListener(evt, resetScreensaver);
 });
+
