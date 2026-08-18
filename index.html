@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Kitten's Hub</title>
+    <title>Plums Hub</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -12,9 +12,9 @@
     <div id="login-screen">
         <div class="login-divider"></div>
         <div class="login-box">
-            <img src="pfp.png" id="user-avatar" alt="Plums Avatar" title="Click for password hint">
+            <img src="pfp.png" id="user-avatar" alt="Kittens Avatar" title="Click for password hint">
             <div class="login-info">
-                <h2>Kitten Plum (⁠◕⁠ᴗ⁠◕⁠✿⁠)</h2>
+                <h2>Plum kitti (⁠◕⁠ᴗ⁠◕⁠✿⁠)</h2>
                 <p style="font-size: 11px; color: #ff6699; margin-bottom: 8px;">⚠ Contains 18+ Content. Enter password to verify.</p>
                 <div class="input-group">
                     <input type="password" id="password-input" placeholder="Type your password">
@@ -36,14 +36,15 @@
                 <span>onlyfans 🎀</span>
             </div>
 
+            <!-- FIXED FANSLY ICON -->
             <div class="icon" onclick="window.open('https://fansly.com/puppyc0w', '_blank')">
-                <img src="https://win98icons.alexmeub.com/icons/png/heart-0.png" class="icon-img" alt="Fansly">
+                <img src="https://win98icons.alexmeub.com/icons/png/favorites-0.png" class="icon-img" alt="Fansly">
                 <span>fansly 💖</span>
             </div>
 
             <div class="icon" onclick="window.open('https://onlyfans.com/pocket.puff', '_blank')">
                 <img src="https://win98icons.alexmeub.com/icons/png/directory_closed-4.png" class="icon-img" alt="Free OF">
-                <span>free page ☁️</span>
+                <span>free nsfw ☁️</span>
             </div>
 
             <div class="icon" onclick="window.open('https://x.com/iskrist4ll', '_blank')">
@@ -63,7 +64,7 @@
 
             <div class="icon" onclick="window.open('https://www.snapchat.com/add/iskrist4ll?share_id=Akr7Hrtp_U0&locale=en-US', '_blank')">
                 <img src="https://win98icons.alexmeub.com/icons/png/msg_information-0.png" class="icon-img" alt="Snapchat">
-                <span>snapchat 👻</span>
+                <span>snapchat 🌺</span>
             </div>
 
             <div class="icon" onclick="window.open('https://www.instagram.com/wispchie?igsh=NjY3bHM0ZmJwdGJh&igsi=NjY3bHM0ZmJwdGJh', '_blank')">
@@ -107,7 +108,7 @@
         <div id="start-menu" class="hidden">
             <div class="start-header">
                 <img src="pfp.png" alt="Kitten">
-                <span>Kitten (⁠ ⁠ꈍ⁠ᴗ⁠ꈍ⁠)</span>
+                <span>Plum (⁠ ⁠ꈍ⁠ᴗ⁠ꈍ⁠)</span>
             </div>
             <div class="start-body">
                 <div class="start-links">
@@ -129,10 +130,10 @@
                 <div class="obsessions-box">
                     <h3>✧ Current Obsessions ✧</h3>
                     <ul>
-                        <li>🔞 ❀˖° Sharing my explicit, unhinged, and playful sides</li>
-                        <li>⊹ ࣪ ˖🎧 Deep flexibility and contortion training</li>
-                        <li>˚ ༘ .˚🌱୭ ˚. Late-night plant propagation</li>
-                        <li>๋࣭ ⭑💻 Designing weirdcore/cutecore interfaces</li>
+                        <li>🔞 ❀˖° Sharing my sex addicted brain</li>
+                        <li>⊹ ࣪ ˖🎧 Flexibility and contortion training</li>
+                        <li>˚ ༘ .˚🌱୭ ˚. Late night plant propagation</li>
+                        <li>๋࣭ ⭑💻 Designing neat interfaces</li>
                     </ul>
                 </div>
             </div>
@@ -149,6 +150,18 @@
             </div>
         </div>
 
+        <!-- NEW: Secret Pop-Up Window -->
+        <div class="window hidden" id="window-secret">
+            <div class="title-bar">
+                <span>secret.exe</span>
+                <button class="close-btn" onclick="closeWindow('window-secret')">X</button>
+            </div>
+            <div class="window-content center-content error-text">
+                <h2 style="color: #ff66cc; font-family: 'Comic Sans MS', cursive; margin-bottom: 20px;">u found it ♡</h2>
+                <a href="https://share.myfreecams.com/Puppyc0w/blogs" target="_blank" class="xp-button" style="text-decoration: none; padding: 8px 20px; display: inline-block;">Enter Vault</a>
+            </div>
+        </div>
+
         <!-- Liminal Error Message -->
         <div class="window hidden" id="error-message">
             <div class="title-bar">
@@ -156,7 +169,7 @@
                 <button class="close-btn" onclick="closeWindow('error-message')">X</button>
             </div>
             <div class="window-content center-content error-text">
-                <p id="error-text">You have been here before.</p>
+                <p id="error-text">congrats!</p>
                 <button class="xp-button" onclick="closeWindow('error-message')">OK</button>
             </div>
         </div>
@@ -174,3 +187,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+
