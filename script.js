@@ -62,6 +62,7 @@ function openWindow(id) {
     
     if (id === 'window-game' && !gameActive) {
         initGame();
+        resetScreensaver(); // Resets screensaver to clear timeout
     }
     
     trackClicks();
@@ -72,6 +73,7 @@ function closeWindow(id) {
     if (id === 'window-game') {
         gameActive = false;
         cancelAnimationFrame(gameLoop);
+        resetScreensaver(); // Restart screensaver timer when game closes
     }
 }
 
@@ -119,7 +121,6 @@ windows.forEach(win => {
     document.addEventListener('touchend', dragEnd);
 
     function dragStart(e) {
-        // Prevent drag if clicking the close button
         if (e.target.classList.contains('close-btn')) return;
         
         isDragging = true;
@@ -200,11 +201,11 @@ setInterval(() => {
 
 // --- VERTICAL PLATFORMER MINI GAME ---
 let gameLoop;
-// Updated width and height to match the new CSS (100x100)
-let player = { x: 110, y: 250, width: 100, height: 100, vy: 0 };
+// Updated width and height to match the new CSS (150x150)
+let player = { x: 85, y: 150, width: 150, height: 150, vy: 0 };
 let platforms = [];
-let gravity = 0.15; // Slowed down gravity for floaty feel
-let jumpPower = -5.5; // Decreased jump power to match the slower gravity
+let gravity = 0.25; 
+let jumpPower = -6.5; 
 let score = 0;
 let lives = 3;
 let gameActive = false;
@@ -212,7 +213,6 @@ let mouseX = 160;
 
 const gameContainer = document.getElementById('game-container');
 
-// Control tracking
 gameContainer.addEventListener('mousemove', (e) => {
     let rect = gameContainer.getBoundingClientRect();
     mouseX = e.clientX - rect.left;
@@ -227,18 +227,18 @@ function initGame() {
     platforms = [];
     score = 0;
     lives = 3;
-    player.y = 250;
-    player.x = 110;
+    player.y = 150;
+    player.x = 85;
     player.vy = 0;
     
     updateHearts();
     document.getElementById('score-display').innerText = `Score: ${score}`;
     document.getElementById('game-over-screen').classList.add('hidden');
 
-    // Create starting platforms (centered for the 120px wide platform)
-    platforms.push({ x: 100, y: 380, element: null }); 
+    // Create starting platforms (centered for the 160px wide platform)
+    platforms.push({ x: 80, y: 380, element: null }); 
     for(let i = 0; i < 5; i++) {
-        platforms.push({ x: Math.random() * 200, y: i * 70, element: null });
+        platforms.push({ x: Math.random() * 160, y: i * 70, element: null });
     }
     renderPlatforms();
     
@@ -250,34 +250,31 @@ function initGame() {
 function updateGame() {
     if(!gameActive) return;
 
-    // Apply gravity
     player.vy += gravity;
     player.y += player.vy;
 
-    // Move player smoothly towards horizontal mouse/touch position (slowed down easing)
     let targetX = mouseX - (player.width / 2);
     player.x += (targetX - player.x) * 0.08;
 
-    // Screen wrap (go out left side, appear on right side)
-    if(player.x < -30) player.x = 320;
-    if(player.x > 320) player.x = -30;
+    // Screen wrap
+    if(player.x < -75) player.x = 320;
+    if(player.x > 320) player.x = -75;
 
-    // Platform Collision (only when falling, updated for 100px OC and 120px platform)
+    // Platform Collision 
     if (player.vy > 0) {
         platforms.forEach(plat => {
-            // Added 20px padding so her edges don't unfairly hit the platforms
-            if(player.x + player.width - 20 > plat.x && player.x + 20 < plat.x + 120 &&
-               player.y + player.height > plat.y && player.y + player.height < plat.y + 32 + player.vy) {
-                player.vy = jumpPower; // Bounce!
+            // Added 40px padding on the sides so her edges don't unfairly hit the platforms
+            if(player.x + player.width - 40 > plat.x && player.x + 40 < plat.x + 160 &&
+               player.y + player.height > plat.y && player.y + player.height < plat.y + 42 + player.vy) {
+                player.vy = jumpPower; 
                 
-                // Add CSS bounce animation to platform
                 plat.element.classList.add('platform-bounce');
                 setTimeout(() => plat.element.classList.remove('platform-bounce'), 150);
             }
         });
     }
 
-    // Camera scrolling (move platforms down when player goes high)
+    // Camera scrolling
     if (player.y < 150) {
         let diff = 150 - player.y;
         player.y = 150;
@@ -288,7 +285,6 @@ function updateGame() {
             plat.y += diff;
         });
 
-        // Clean up platforms off bottom and spawn new ones top
         platforms = platforms.filter(plat => {
             if(plat.y > 420) {
                 plat.element.remove();
@@ -300,8 +296,8 @@ function updateGame() {
         while(platforms.length < 6) {
             let lastY = platforms[platforms.length-1]?.y || 0;
             platforms.push({
-                x: Math.random() * 200,
-                y: lastY - (Math.random() * 60 + 60),
+                x: Math.random() * 160, // Keep them within bounds
+                y: lastY - (Math.random() * 60 + 80), // Spread out a bit more vertically
                 element: null
             });
         }
@@ -314,14 +310,30 @@ function updateGame() {
         updateHearts();
         
         if(lives > 0) {
-            // Bounce back up safely
             player.y = 150;
             player.vy = jumpPower;
-            platforms.push({ x: player.x, y: 250, element: null });
+            platforms.push({ x: player.x, y: 300, element: null });
             renderPlatforms();
         } else {
             gameActive = false;
-            document.getElementById('game-over-screen').classList.remove('hidden');
+            
+            // --- HIGH SCORE LOGIC ---
+            const gameOverScreen = document.getElementById('game-over-screen');
+            const msgDisplay = document.getElementById('game-over-msg');
+            const highScoreDisplay = document.getElementById('high-score-display');
+            
+            let savedHighScore = localStorage.getItem('jumpHighScore') || 0;
+            
+            if (score > savedHighScore) {
+                localStorage.setItem('jumpHighScore', score);
+                msgDisplay.innerText = "New High Score! 💖";
+                highScoreDisplay.innerText = `You scored: ${score}`;
+            } else {
+                msgDisplay.innerText = "Good try!";
+                highScoreDisplay.innerText = `Score: ${score} | High Score: ${savedHighScore}`;
+            }
+            
+            gameOverScreen.classList.remove('hidden');
         }
     }
 
@@ -377,6 +389,9 @@ function resetScreensaver() {
     clearTimeout(screensaverTimeout);
     screensaver.classList.add('hidden');
     cancelAnimationFrame(animationFrame);
+    
+    // SAFETY LOCK: Prevent screensaver from starting if the game is being played!
+    if (gameActive) return; 
     
     screensaverTimeout = setTimeout(showScreensaver, 10000); 
 }
