@@ -1,7 +1,7 @@
 // --- CONFIGURATION ---
 const CORRECT_PASSWORD = "dream"; 
 const PASSWORD_HINT = "psst... the password is 'dream'";
-const SECRET_CAM_LINK = "YOUR_CAM_LINK_HERE"; // Put your cam link here!
+const SECRET_CAM_LINK = "YOUR_CAM_LINK_HERE"; 
 
 // Liminal Error Messages
 const liminalMessages = [
