@@ -1,7 +1,6 @@
 // --- CONFIGURATION ---
 const CORRECT_PASSWORD = "dream"; 
 const PASSWORD_HINT = "psst... the password is 'dream'";
-const SECRET_CAM_LINK = "YOUR_CAM_LINK_HERE"; 
 
 // Liminal Error Messages
 const liminalMessages = [
@@ -108,7 +107,8 @@ let isGlitching = false;
 
 clock.addEventListener('click', () => {
     if (isGlitching) {
-        window.open(SECRET_CAM_LINK, '_blank');
+        // Now opens the custom popup window instead of opening the link directly!
+        openWindow('window-secret');
     }
 });
 
@@ -128,7 +128,7 @@ setInterval(() => {
         isGlitching = true; 
         const randomGlitch = glitchTimes[Math.floor(Math.random() * glitchTimes.length)];
         clock.innerText = randomGlitch;
-        clock.style.color = "#ff66cc"; // Turns pink to show it is a clickable secret
+        clock.style.color = "#ff66cc"; 
         
         setTimeout(() => {
             isGlitching = false; 
@@ -177,3 +177,4 @@ function animateLogo() {
 ['mousemove', 'touchstart', 'click', 'scroll'].forEach(evt => {
     document.addEventListener(evt, resetScreensaver);
 });
+
