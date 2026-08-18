@@ -200,11 +200,11 @@ setInterval(() => {
 
 // --- VERTICAL PLATFORMER MINI GAME ---
 let gameLoop;
-// Updated width and height to match the new CSS (50x50)
-let player = { x: 144, y: 300, width: 50, height: 50, vy: 0 };
+// Updated width and height to match the new CSS (100x100)
+let player = { x: 110, y: 250, width: 100, height: 100, vy: 0 };
 let platforms = [];
-let gravity = 0.25; // Lowered gravity to fall slower
-let jumpPower = -6.5; // Lowered jump power for a floatier jump
+let gravity = 0.15; // Slowed down gravity for floaty feel
+let jumpPower = -5.5; // Decreased jump power to match the slower gravity
 let score = 0;
 let lives = 3;
 let gameActive = false;
@@ -227,18 +227,18 @@ function initGame() {
     platforms = [];
     score = 0;
     lives = 3;
-    player.y = 300;
-    player.x = 144;
+    player.y = 250;
+    player.x = 110;
     player.vy = 0;
     
     updateHearts();
     document.getElementById('score-display').innerText = `Score: ${score}`;
     document.getElementById('game-over-screen').classList.add('hidden');
 
-    // Create starting platforms
-    platforms.push({ x: 130, y: 380, element: null }); // Base platform
+    // Create starting platforms (centered for the 120px wide platform)
+    platforms.push({ x: 100, y: 380, element: null }); 
     for(let i = 0; i < 5; i++) {
-        platforms.push({ x: Math.random() * 260, y: i * 70, element: null });
+        platforms.push({ x: Math.random() * 200, y: i * 70, element: null });
     }
     renderPlatforms();
     
@@ -254,18 +254,20 @@ function updateGame() {
     player.vy += gravity;
     player.y += player.vy;
 
-    // Move player smoothly towards horizontal mouse/touch position
-    player.x += (mouseX - (player.x + player.width/2)) * 0.1;
+    // Move player smoothly towards horizontal mouse/touch position (slowed down easing)
+    let targetX = mouseX - (player.width / 2);
+    player.x += (targetX - player.x) * 0.08;
 
     // Screen wrap (go out left side, appear on right side)
-    if(player.x < -16) player.x = 320;
-    if(player.x > 320) player.x = -16;
+    if(player.x < -30) player.x = 320;
+    if(player.x > 320) player.x = -30;
 
-    // Platform Collision (only when falling)
+    // Platform Collision (only when falling, updated for 100px OC and 120px platform)
     if (player.vy > 0) {
         platforms.forEach(plat => {
-            if(player.x + player.width > plat.x && player.x < plat.x + 60 &&
-               player.y + player.height > plat.y && player.y + player.height < plat.y + 16 + player.vy) {
+            // Added 20px padding so her edges don't unfairly hit the platforms
+            if(player.x + player.width - 20 > plat.x && player.x + 20 < plat.x + 120 &&
+               player.y + player.height > plat.y && player.y + player.height < plat.y + 32 + player.vy) {
                 player.vy = jumpPower; // Bounce!
                 
                 // Add CSS bounce animation to platform
@@ -298,8 +300,8 @@ function updateGame() {
         while(platforms.length < 6) {
             let lastY = platforms[platforms.length-1]?.y || 0;
             platforms.push({
-                x: Math.random() * 260,
-                y: lastY - (Math.random() * 50 + 50),
+                x: Math.random() * 200,
+                y: lastY - (Math.random() * 60 + 60),
                 element: null
             });
         }
@@ -315,7 +317,7 @@ function updateGame() {
             // Bounce back up safely
             player.y = 150;
             player.vy = jumpPower;
-            platforms.push({ x: player.x - 15, y: 200, element: null });
+            platforms.push({ x: player.x, y: 250, element: null });
             renderPlatforms();
         } else {
             gameActive = false;
