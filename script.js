@@ -1,6 +1,7 @@
 // --- CONFIGURATION ---
 const CORRECT_PASSWORD = "dream"; 
 const PASSWORD_HINT = "psst... the password is 'dream'";
+const SECRET_CAM_LINK = "https://share.myfreecams.com/Puppyc0w/blogs"; 
 
 // Liminal Error Messages
 const liminalMessages = [
@@ -59,11 +60,19 @@ function openWindow(id) {
     allWindows.forEach(w => w.style.zIndex = 100);
     win.style.zIndex = 101;
     
+    if (id === 'window-game' && !gameActive) {
+        initGame();
+    }
+    
     trackClicks();
 }
 
 function closeWindow(id) {
     document.getElementById(id).classList.add('hidden');
+    if (id === 'window-game') {
+        gameActive = false;
+        cancelAnimationFrame(gameLoop);
+    }
 }
 
 function trackClicks() {
@@ -88,6 +97,54 @@ function triggerLiminalError() {
     errorWin.style.zIndex = 999; 
 }
 
+// --- DRAGGABLE WINDOWS ---
+const windows = document.querySelectorAll('.window');
+
+windows.forEach(win => {
+    const titleBar = win.querySelector('.drag-handle');
+    if (!titleBar) return;
+
+    let isDragging = false;
+    let startX, startY, initialX, initialY;
+
+    titleBar.addEventListener('mousedown', dragStart);
+    document.addEventListener('mousemove', dragMove);
+    document.addEventListener('mouseup', dragEnd);
+
+    titleBar.addEventListener('touchstart', (e) => dragStart(e.touches[0]), { passive: false });
+    document.addEventListener('touchmove', (e) => {
+        if (isDragging) e.preventDefault(); 
+        dragMove(e.touches[0]);
+    }, { passive: false });
+    document.addEventListener('touchend', dragEnd);
+
+    function dragStart(e) {
+        // Prevent drag if clicking the close button
+        if (e.target.classList.contains('close-btn')) return;
+        
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        initialX = win.offsetLeft;
+        initialY = win.offsetTop;
+        
+        document.querySelectorAll('.window').forEach(w => w.style.zIndex = 100);
+        win.style.zIndex = 101;
+    }
+
+    function dragMove(e) {
+        if (!isDragging) return;
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+        win.style.left = `${initialX + dx}px`;
+        win.style.top = `${initialY + dy}px`;
+    }
+
+    function dragEnd() {
+        isDragging = false;
+    }
+});
+
 // --- START MENU ---
 document.getElementById('start-btn').addEventListener('click', () => {
     const menu = document.getElementById('start-menu');
@@ -107,7 +164,6 @@ let isGlitching = false;
 
 clock.addEventListener('click', () => {
     if (isGlitching) {
-        // Now opens the custom popup window instead of opening the link directly!
         openWindow('window-secret');
     }
 });
@@ -141,6 +197,170 @@ setInterval(() => {
         }
     }
 }, 1000);
+
+// --- VERTICAL PLATFORMER MINI GAME ---
+let gameLoop;
+let player = { x: 144, y: 300, width: 32, height: 32, vy: 0 };
+let platforms = [];
+let gravity = 0.4;
+let jumpPower = -8;
+let score = 0;
+let lives = 3;
+let gameActive = false;
+let mouseX = 160;
+
+const gameContainer = document.getElementById('game-container');
+
+// Control tracking
+gameContainer.addEventListener('mousemove', (e) => {
+    let rect = gameContainer.getBoundingClientRect();
+    mouseX = e.clientX - rect.left;
+});
+gameContainer.addEventListener('touchmove', (e) => {
+    let rect = gameContainer.getBoundingClientRect();
+    mouseX = e.touches[0].clientX - rect.left;
+});
+
+function initGame() {
+    platforms.forEach(p => { if(p.element) p.element.remove(); });
+    platforms = [];
+    score = 0;
+    lives = 3;
+    player.y = 300;
+    player.x = 144;
+    player.vy = 0;
+    
+    updateHearts();
+    document.getElementById('score-display').innerText = `Score: ${score}`;
+    document.getElementById('game-over-screen').classList.add('hidden');
+
+    // Create starting platforms
+    platforms.push({ x: 130, y: 380, element: null }); // Base platform
+    for(let i = 0; i < 5; i++) {
+        platforms.push({ x: Math.random() * 260, y: i * 70, element: null });
+    }
+    renderPlatforms();
+    
+    gameActive = true;
+    cancelAnimationFrame(gameLoop);
+    updateGame();
+}
+
+function updateGame() {
+    if(!gameActive) return;
+
+    // Apply gravity
+    player.vy += gravity;
+    player.y += player.vy;
+
+    // Move player smoothly towards horizontal mouse/touch position
+    player.x += (mouseX - (player.x + player.width/2)) * 0.1;
+
+    // Screen wrap (go out left side, appear on right side)
+    if(player.x < -16) player.x = 320;
+    if(player.x > 320) player.x = -16;
+
+    // Platform Collision (only when falling)
+    if (player.vy > 0) {
+        platforms.forEach(plat => {
+            if(player.x + player.width > plat.x && player.x < plat.x + 60 &&
+               player.y + player.height > plat.y && player.y + player.height < plat.y + 16 + player.vy) {
+                player.vy = jumpPower; // Bounce!
+                
+                // Add CSS bounce animation to platform
+                plat.element.classList.add('platform-bounce');
+                setTimeout(() => plat.element.classList.remove('platform-bounce'), 150);
+            }
+        });
+    }
+
+    // Camera scrolling (move platforms down when player goes high)
+    if (player.y < 150) {
+        let diff = 150 - player.y;
+        player.y = 150;
+        score += Math.floor(diff);
+        document.getElementById('score-display').innerText = `Score: ${score}`;
+        
+        platforms.forEach(plat => {
+            plat.y += diff;
+        });
+
+        // Clean up platforms off bottom and spawn new ones top
+        platforms = platforms.filter(plat => {
+            if(plat.y > 420) {
+                plat.element.remove();
+                return false;
+            }
+            return true;
+        });
+
+        while(platforms.length < 6) {
+            let lastY = platforms[platforms.length-1]?.y || 0;
+            platforms.push({
+                x: Math.random() * 260,
+                y: lastY - (Math.random() * 50 + 50),
+                element: null
+            });
+        }
+        renderPlatforms();
+    }
+
+    // Fall logic
+    if (player.y > 420) {
+        lives--;
+        updateHearts();
+        
+        if(lives > 0) {
+            // Bounce back up safely
+            player.y = 150;
+            player.vy = jumpPower;
+            platforms.push({ x: player.x - 15, y: 200, element: null });
+            renderPlatforms();
+        } else {
+            gameActive = false;
+            document.getElementById('game-over-screen').classList.remove('hidden');
+        }
+    }
+
+    // Render DOM positions
+    const playerEl = document.getElementById('game-player-el');
+    playerEl.style.left = player.x + 'px';
+    playerEl.style.top = player.y + 'px';
+
+    platforms.forEach(plat => {
+        if(plat.element) {
+            plat.element.style.top = plat.y + 'px';
+            plat.element.style.left = plat.x + 'px';
+        }
+    });
+
+    gameLoop = requestAnimationFrame(updateGame);
+}
+
+function renderPlatforms() {
+    const platContainer = document.getElementById('platforms-container');
+    platforms.forEach(plat => {
+        if(!plat.element) {
+            let el = document.createElement('div');
+            el.className = 'game-platform';
+            platContainer.appendChild(el);
+            plat.element = el;
+        }
+    });
+}
+
+function updateHearts() {
+    const heartsContainer = document.getElementById('health-bar');
+    heartsContainer.innerHTML = '';
+    for(let i = 0; i < lives; i++) {
+        let img = document.createElement('img');
+        img.src = 'hrt.png';
+        img.className = 'heart-icon';
+        heartsContainer.appendChild(img);
+    }
+}
+
+window.restartGame = initGame;
 
 // --- SCREENSAVER LOGIC ---
 let screensaverTimeout;
@@ -177,52 +397,3 @@ function animateLogo() {
 ['mousemove', 'touchstart', 'click', 'scroll'].forEach(evt => {
     document.addEventListener(evt, resetScreensaver);
 });
-
-// --- DRAGGABLE WINDOWS ---
-const windows = document.querySelectorAll('.window');
-
-windows.forEach(win => {
-    const titleBar = win.querySelector('.title-bar');
-    if (!titleBar) return;
-
-    let isDragging = false;
-    let startX, startY, initialX, initialY;
-
-    // Mouse Events
-    titleBar.addEventListener('mousedown', dragStart);
-    document.addEventListener('mousemove', dragMove);
-    document.addEventListener('mouseup', dragEnd);
-
-    // Touch Events (for mobile)
-    titleBar.addEventListener('touchstart', (e) => dragStart(e.touches[0]), { passive: false });
-    document.addEventListener('touchmove', (e) => {
-        if (isDragging) e.preventDefault(); // Prevents scrolling while dragging
-        dragMove(e.touches[0]);
-    }, { passive: false });
-    document.addEventListener('touchend', dragEnd);
-
-    function dragStart(e) {
-        isDragging = true;
-        startX = e.clientX;
-        startY = e.clientY;
-        initialX = win.offsetLeft;
-        initialY = win.offsetTop;
-        
-        // Bring clicked window to the front
-        document.querySelectorAll('.window').forEach(w => w.style.zIndex = 100);
-        win.style.zIndex = 101;
-    }
-
-    function dragMove(e) {
-        if (!isDragging) return;
-        const dx = e.clientX - startX;
-        const dy = e.clientY - startY;
-        win.style.left = `${initialX + dx}px`;
-        win.style.top = `${initialY + dy}px`;
-    }
-
-    function dragEnd() {
-        isDragging = false;
-    }
-});
-
