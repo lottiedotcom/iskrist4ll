@@ -5,7 +5,7 @@ body, html {
     height: 100%; 
     height: 100dvh; 
     overflow: hidden; 
-    background-color: #ffd1dc; /* True baby pink base */
+    background-color: #ffd1dc; 
     touch-action: manipulation; 
 }
 .hidden { display: none !important; }
@@ -35,7 +35,7 @@ body, html {
 #login-btn { padding: 5px 10px; background: #ff99cc; color: white; border: 1px solid white; border-radius: 3px; font-weight: bold; cursor: pointer; }
 #login-error { color: #ff4d4d; font-size: 12px; margin-top: 5px; opacity: 0; font-weight: bold; }
 
-/* Desktop Environment - Removed background image to show pure pink */
+/* Desktop Environment */
 #desktop {
     width: 100%; height: 100%;
     background: none; 
@@ -197,7 +197,7 @@ body, html {
 #game-over-screen p { font-size: 12px; margin-bottom: 15px; }
 
 .game-player {
-    position: absolute; width: 32px; height: 32px;
+    position: absolute; width: 50px; height: 50px; /* Increased character size! */
     background: url('gc.png') no-repeat center center;
     background-size: contain; z-index: 5;
 }
@@ -214,3 +214,4 @@ body, html {
 /* Screensaver */
 #screensaver { position: absolute; top: 0; left: 0; width: 100vw; height: 100vh; background: black; z-index: 2000; overflow: hidden; }
 #bounce-logo { position: absolute; width: 80px; }
+
