@@ -51,6 +51,7 @@ loginBtn.addEventListener('click', () => {
 // --- WINDOW MANAGEMENT & RAPID CLICKS ---
 let clickCount = 0;
 let clickTimer = null;
+const gameBGM = document.getElementById('game-bgm');
 
 function openWindow(id) {
     const win = document.getElementById(id);
@@ -60,9 +61,15 @@ function openWindow(id) {
     allWindows.forEach(w => w.style.zIndex = 100);
     win.style.zIndex = 101;
     
-    if (id === 'window-game' && !gameActive) {
-        initGame();
-        resetScreensaver(); 
+    if (id === 'window-game') {
+        if (!gameActive) {
+            initGame();
+            resetScreensaver(); 
+        }
+        if (gameBGM) {
+            gameBGM.currentTime = 0;
+            gameBGM.play().catch(e => {}); 
+        }
     }
     
     trackClicks();
@@ -74,6 +81,11 @@ function closeWindow(id) {
         gameActive = false;
         cancelAnimationFrame(gameLoop);
         resetScreensaver(); 
+        
+        if (gameBGM) {
+            gameBGM.pause();
+            gameBGM.currentTime = 0; 
+        }
     }
 }
 
@@ -290,12 +302,9 @@ function updateGame() {
 
         // --- PLATFORM COLLISION (TIGHTENED HITBOX!) ---
         if (player.vy > 0) {
-            // Recalculate center for precise hit detection
             let preciseCenter = player.x + (player.width / 2); 
             
             platforms.forEach(plat => {
-                // Her CENTER must land inside the solid 140px middle of the cloud
-                // Her FEET must be hitting the top 25px section of the cloud to bounce
                 if(preciseCenter > plat.x + 30 && preciseCenter < plat.x + 170 &&
                    player.y + player.height > plat.y + 10 && 
                    player.y + player.height < plat.y + 30 + player.vy) {
@@ -376,7 +385,6 @@ function updateGame() {
                 
                 player.y = 160;
                 player.vy = 0;
-                // Spawns a guaranteed safe cloud directly under her so she doesn't fall again
                 platforms.push({ x: player.x - 10, y: 380, element: null });
                 renderGameObjects();
             } else {
@@ -496,3 +504,4 @@ function animateLogo() {
 ['mousemove', 'touchstart', 'click', 'scroll'].forEach(evt => {
     document.addEventListener(evt, resetScreensaver);
 });
+
