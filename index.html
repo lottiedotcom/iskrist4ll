@@ -20,7 +20,7 @@
                     <input type="password" id="password-input" placeholder="Type your password">
                     <button id="login-btn">➔</button>
                 </div>
-                <p id="login-error">Incorrect password! Check the picture...</p>
+                <p id="login-error">Incorrect password, click the pfp!</p>
             </div>
         </div>
     </div>
@@ -96,6 +96,11 @@
                 <img src="https://win98icons.alexmeub.com/icons/png/joystick-0.png" class="icon-img" alt="Mini Game">
                 <span>jump_game 🎮</span>
             </div>
+            
+            <div class="icon" onclick="openWindow('window-draw')">
+                <img src="https://win98icons.alexmeub.com/icons/png/paint_file-2.png" class="icon-img" alt="Draw for me">
+                <span>draw me 🖍️</span>
+            </div>
 
         </div>
 
@@ -146,6 +151,24 @@
                         <li>๋࣭ ⭑💻 Designing neat interfaces</li>
                     </ul>
                 </div>
+            </div>
+        </div>
+
+        <!-- WINDOW: Drawing Board -->
+        <div class="window hidden" id="window-draw" style="width: 320px;">
+            <div class="title-bar drag-handle">
+                <span>doodle_for_kitti.exe</span>
+                <button class="close-btn" onclick="closeWindow('window-draw')">X</button>
+            </div>
+            <div class="window-content center-content">
+                <p style="font-size: 11px; margin-bottom: 8px;">Leave me a cute doodle!</p>
+                <canvas id="doodle-canvas" width="280" height="200" style="border: 2px inset #dfdfdf; background: white; cursor: crosshair; touch-action: none;"></canvas>
+                <div style="display: flex; gap: 8px; margin-top: 8px; justify-content: center; align-items: center;">
+                    <input type="color" id="brush-color" value="#ff6699" style="width: 25px; height: 25px; padding: 0; border: none; cursor: pointer;">
+                    <button class="xp-button" onclick="clearCanvas()" style="font-size: 11px;">Clear</button>
+                    <button class="xp-button" id="submit-doodle-btn" onclick="submitDrawing()" style="font-size: 11px; font-weight: bold; color: #ff66cc;">Send to Kitti!</button>
+                </div>
+                <p id="draw-status" style="font-size: 11px; color: #ff6699; margin-top: 8px; display: none;">Drawing sent! 💖</p>
             </div>
         </div>
 
