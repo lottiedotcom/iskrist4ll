@@ -505,3 +505,91 @@ function animateLogo() {
     document.addEventListener(evt, resetScreensaver);
 });
 
+// --- DOODLE CANVAS LOGIC ---
+const canvas = document.getElementById('doodle-canvas');
+const ctx = canvas.getContext('2d');
+let isDrawing = false;
+
+// Set initial white background so it doesn't send transparent images
+ctx.fillStyle = "white";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+function getCoordinates(e) {
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.clientX || e.touches[0].clientX) - rect.left;
+    const y = (e.clientY || e.touches[0].clientY) - rect.top;
+    return { x, y };
+}
+
+function startDrawing(e) {
+    isDrawing = true;
+    const { x, y } = getCoordinates(e);
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    e.preventDefault();
+}
+
+function draw(e) {
+    if (!isDrawing) return;
+    const color = document.getElementById('brush-color').value;
+    const { x, y } = getCoordinates(e);
+    
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.stroke();
+    e.preventDefault();
+}
+
+function stopDrawing() {
+    isDrawing = false;
+    ctx.closePath();
+}
+
+// Mouse Events
+canvas.addEventListener('mousedown', startDrawing);
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('mouseup', stopDrawing);
+canvas.addEventListener('mouseout', stopDrawing);
+
+// Touch Events for mobile
+canvas.addEventListener('touchstart', startDrawing);
+canvas.addEventListener('touchmove', draw);
+canvas.addEventListener('touchend', stopDrawing);
+
+function clearCanvas() {
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    document.getElementById('draw-status').style.display = 'none';
+    document.getElementById('submit-doodle-btn').innerText = "Send to Kitti!";
+}
+
+async function submitDrawing() {
+    const btn = document.getElementById('submit-doodle-btn');
+    btn.innerText = "Sending...";
+    
+    // Convert canvas to Base64 image
+    const imageBase64 = canvas.toDataURL('image/png');
+    
+    try {
+        const response = await fetch('/api/doodle', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ image: imageBase64 })
+        });
+        
+        if (response.ok) {
+            document.getElementById('draw-status').style.display = 'block';
+            document.getElementById('draw-status').innerText = "Drawing sent! 💖";
+            btn.innerText = "Sent!";
+            setTimeout(clearCanvas, 3000);
+        } else {
+            document.getElementById('draw-status').innerText = "Error sending 😢";
+            document.getElementById('draw-status').style.display = 'block';
+            btn.innerText = "Try Again";
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
