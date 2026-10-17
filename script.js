@@ -1,6 +1,6 @@
 // --- CONFIGURATION ---
-const CORRECT_PASSWORD = "dream"; 
-const PASSWORD_HINT = "psst... the password is 'dream'";
+const CORRECT_PASSWORD = "sex"; 
+const PASSWORD_HINT = "psst... the password is 'sex'";
 const SECRET_CAM_LINK = "https://share.myfreecams.com/Puppyc0w/blogs"; 
 
 // Liminal Error Messages
