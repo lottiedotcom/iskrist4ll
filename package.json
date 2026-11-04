@@ -13,5 +13,8 @@
     "xp"
   ],
   "author": "Kitten",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/speed-insights": "^2.0.0"
+  }
 }
