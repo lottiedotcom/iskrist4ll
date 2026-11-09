@@ -42,6 +42,15 @@ loginBtn.addEventListener('click', () => {
         document.getElementById('login-screen').classList.add('hidden');
         document.getElementById('desktop').classList.remove('hidden');
         resetScreensaver(); 
+        
+        // Show the system alert 2 seconds after logging in
+        setTimeout(() => {
+            const systemAlert = document.getElementById('system-alert');
+            if (systemAlert) {
+                systemAlert.classList.remove('hidden');
+            }
+        }, 2000);
+
     } else {
         document.getElementById('login-error').style.opacity = 1;
         passInput.value = "";
