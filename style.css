@@ -14,8 +14,8 @@ body::after {
     top: 0; left: 0; width: 100%; height: 100%;
     background: url('https://img1.picmix.com/output/stamp/normal/1/3/1/1/2621131_adae0.gif') repeat;
     pointer-events: none; 
-    z-index: 8999; 
-    opacity: 0.9; 
+    z-index: 5; /* Placed behind the login box and windows */
+    opacity: 0.25; /* Made it much more transparent */
 }
 
 .hidden { display: none !important; }
