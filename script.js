@@ -602,3 +602,83 @@ async function submitDrawing() {
         console.error('Error:', error);
     }
 }
+
+// --- POLAROID LOGIC (UPDATED FOR SMOOTH DRAGGING) ---
+const polaroid = document.getElementById('polaroid-widget');
+const resizeBtn = document.getElementById('resize-polaroid-btn');
+
+// Resize Toggle
+resizeBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); 
+    if (polaroid.classList.contains('polaroid-small')) {
+        polaroid.classList.remove('polaroid-small');
+        polaroid.classList.add('polaroid-large');
+    } else {
+        polaroid.classList.remove('polaroid-large');
+        polaroid.classList.add('polaroid-small');
+    }
+});
+
+// Draggable Logic for Polaroid
+let isDraggingPol = false;
+let startXPol, startYPol, initialXPol, initialYPol;
+
+function dragStartPol(e) {
+    if (e.target === resizeBtn) return;
+    isDraggingPol = true;
+    
+    // Support for both mouse and touch
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    
+    startXPol = clientX;
+    startYPol = clientY;
+    
+    // Get the exact current position on the screen
+    const rect = polaroid.getBoundingClientRect();
+    initialXPol = rect.left;
+    initialYPol = rect.top;
+    
+    // Lock it to top/left and clear bottom/right so it moves freely
+    polaroid.style.right = 'auto'; 
+    polaroid.style.bottom = 'auto'; 
+    polaroid.style.left = initialXPol + 'px';
+    polaroid.style.top = initialYPol + 'px';
+    
+    // Remove the smooth transition momentarily so it doesn't "lag" behind the cursor
+    polaroid.style.transition = 'none';
+    polaroid.style.zIndex = 110; 
+}
+
+function dragMovePol(e) {
+    if (!isDraggingPol) return;
+    e.preventDefault(); // Stop the screen from scrolling on mobile
+    
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    
+    const dx = clientX - startXPol;
+    const dy = clientY - startYPol;
+    
+    polaroid.style.left = `${initialXPol + dx}px`;
+    polaroid.style.top = `${initialYPol + dy}px`;
+}
+
+function dragEndPol() {
+    if (!isDraggingPol) return;
+    isDraggingPol = false;
+    
+    // Restore z-index and transitions after dropping
+    polaroid.style.zIndex = 50; 
+    polaroid.style.transition = 'width 0.3s ease, height 0.3s ease';
+}
+
+// Mouse Events
+polaroid.addEventListener('mousedown', dragStartPol);
+document.addEventListener('mousemove', dragMovePol);
+document.addEventListener('mouseup', dragEndPol);
+
+// Touch Events
+polaroid.addEventListener('touchstart', dragStartPol, { passive: false });
+document.addEventListener('touchmove', dragMovePol, { passive: false });
+document.addEventListener('touchend', dragEndPol);
