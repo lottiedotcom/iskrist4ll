@@ -1,3 +1,4 @@
+/* style.css */
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tahoma', sans-serif; }
 body, html { 
     width: 100%; 
@@ -213,4 +214,72 @@ body::after {
 }
 #system-alert .title-bar {
     background: linear-gradient(to bottom, #ebd6eb, #d8b3d8 50%, #c496c4);
+}
+
+/* ========================================= */
+/* POLAROID WIDGET STYLES                    */
+/* ========================================= */
+
+#polaroid-widget {
+    position: absolute;
+    bottom: 60px; /* Base starting position */
+    right: 20px;
+    background: white;
+    padding: 10px 10px 25px 10px;
+    box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
+    transform: rotate(4deg);
+    z-index: 50; /* Above desktop, below windows */
+    cursor: grab;
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+#polaroid-widget:active {
+    cursor: grabbing;
+}
+
+/* The two sizes you can toggle between */
+.polaroid-small { width: 140px; }
+.polaroid-large { width: 260px; transform: rotate(0deg) !important; box-shadow: 5px 5px 15px rgba(0,0,0,0.4); }
+
+#polaroid-widget img {
+    width: 100%;
+    height: auto;
+    border: 1px solid #e0e0e0;
+    pointer-events: none; /* Crucial so dragging the image drags the div */
+}
+
+.polaroid-caption {
+    font-family: 'Comic Sans MS', cursive;
+    font-size: 13px;
+    text-align: center;
+    margin-top: 8px;
+    color: #8b6b88;
+}
+
+/* Cute piece of tape */
+.cute-tape {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-2deg);
+    width: 60px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.6);
+    border-left: 2px dashed rgba(0,0,0,0.1);
+    border-right: 2px dashed rgba(0,0,0,0.1);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Resize Button */
+#resize-polaroid-btn {
+    position: absolute;
+    top: 5px; right: 5px;
+    background: #ff99cc;
+    color: white;
+    border: 1px solid white;
+    border-radius: 3px;
+    width: 24px; height: 24px;
+    cursor: pointer;
+    font-weight: bold;
+    z-index: 10;
 }
