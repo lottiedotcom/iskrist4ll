@@ -1,27 +1,23 @@
-/* Reset and Mobile Base */
 * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tahoma', sans-serif; }
 body, html { 
     width: 100%; 
     height: 100%; 
     height: 100dvh; 
     overflow: hidden; 
-    background-color: #d8f1ff; /* Soft ice blue fallback */
+    background-color: #d8f1ff; 
     touch-action: manipulation; 
 }
 .hidden { display: none !important; }
 
-/* Glitter Overlay (Add the HTML for this below!) */
 #glitter-overlay {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    /* REPLACE THE URL BELOW WITH YOUR GLITTER GIF LINK */
     background: url('https://img1.picmix.com/output/stamp/normal/1/3/1/1/2621131_adae0.gif') repeat;
-    pointer-events: none; /* Ensures you can click through the glitter */
-    z-index: 8999; /* Sits just behind the taskbar */
-    opacity: 0.5; /* Adjust if the glitter is too overwhelming */
+    pointer-events: none; 
+    z-index: 8999; 
+    opacity: 0.9; 
 }
 
-/* Wintercore Login Screen */
 #login-screen {
     width: 100%; height: 100%;
     background: #d8f1ff; 
@@ -46,11 +42,10 @@ body, html {
 #login-btn { padding: 5px 10px; background: #d8b3d8; color: white; border: 1px solid white; border-radius: 3px; font-weight: bold; cursor: pointer; }
 #login-error { color: #ff99aa; font-size: 12px; margin-top: 5px; opacity: 0; font-weight: bold; }
 
-/* Desktop Environment (Ice Blue Polka Dots) */
 #desktop {
     width: 100%; height: 100%;
     position: relative; display: flex; flex-direction: column;
-    background-color: #d8f1ff; /* Soft ice blue */
+    background-color: #d8f1ff; 
     background-image: 
         radial-gradient(#ffffff 15%, transparent 16%), 
         radial-gradient(#ffffff 15%, transparent 16%);
@@ -58,7 +53,6 @@ body, html {
     background-position: 0 0, 15px 15px;
 }
 
-/* Desktop Icons */
 .desktop-icons-container { 
     padding: 10px; 
     display: flex; 
@@ -73,14 +67,13 @@ body, html {
 .icon span { font-size: 11px; background: transparent; padding: 2px; border-radius: 3px; display: inline-block; line-height: 1.2; }
 .icon:active span { background: #b3e6ff; color: #333; }
 
-/* Frosty Plum Taskbar */
 #taskbar {
     position: fixed; 
     bottom: 0; 
     left: 0; 
     width: 100%; 
     height: 35px;
-    background: #8b6b88; /* Solid frosty plum */
+    background: #8b6b88; 
     border-top: 2px solid #a382a0;
     display: flex; justify-content: space-between; align-items: center; 
     z-index: 9000;
@@ -88,7 +81,7 @@ body, html {
 #start-btn {
     height: 100%; display: flex; align-items: center; padding: 0 15px 0 10px; color: white; 
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; font-style: italic; font-size: 18px; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-    background: linear-gradient(to bottom, #ebd6eb 0%, #d8b3d8 50%, #c496c4 100%); /* Pastel Lavender */
+    background: linear-gradient(to bottom, #ebd6eb 0%, #d8b3d8 50%, #c496c4 100%); 
     cursor: pointer; border-right: 1px solid #a382a0; border-radius: 0 10px 10px 0;
     box-shadow: inset 1px 1px 3px rgba(255,255,255,0.6);
 }
@@ -98,7 +91,6 @@ body, html {
     background: #7a5c78; border-left: 1px solid #a382a0; cursor: pointer; box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2);
 }
 
-/* Lavender Start Menu */
 #start-menu {
     position: fixed; 
     bottom: 35px; 
@@ -119,7 +111,6 @@ body, html {
 .start-links a { text-decoration: none; color: #333; padding: 10px; font-size: 13px; display: block; }
 .start-links a:active { background: #f0f8ff; color: #333; }
 
-/* Icy Blue Windows */
 .window {
     position: absolute; top: 10%; left: 5%; width: 90%; max-width: 400px; max-height: 80%; background: #ffffff;
     border: 3px solid #80ccff; border-radius: 8px 8px 0 0; display: flex; flex-direction: column; z-index: 100;
@@ -141,14 +132,12 @@ body, html {
 .window-content { padding: 10px; overflow-y: auto; flex: 1; min-height: 250px; background: #fafcff; border: 1px solid #b3e6ff; margin: 2px; }
 .no-padding { padding: 0; }
 
-/* Interactive Notepad Area */
 .notepad-area {
     width: 100%; height: 100%; border: none; outline: none; resize: none;
     font-family: 'Lucida Console', Courier, monospace; font-size: 14px; padding: 10px;
     background: #ffffff;
 }
 
-/* Center Content & Winter Buttons */
 .center-content { display: flex; justify-content: center; align-items: center; flex-direction: column; background: #fafcff; }
 .error-text p { font-family: 'Tahoma', sans-serif; font-size: 13px; color: #333; margin-bottom: 20px; }
 .xp-button {
@@ -158,7 +147,6 @@ body, html {
 }
 .text-file { font-family: 'Lucida Console', Courier, monospace; font-size: 13px; color: #333; }
 
-/* Wintercore About Me Page */
 .cute-file { 
     font-family: 'Comic Sans MS', cursive, sans-serif; 
     text-align: center; 
@@ -181,5 +169,4 @@ body, html {
 .obsessions-box h3 { color: #8b6b88; font-size: 14px; text-align: center; margin-bottom: 8px; text-shadow: 1px 1px 1px white; }
 .obsessions-box ul { list-style-type: none; padding: 0; font-size: 12px; color: #555; }
 .obsessions-box li { margin-bottom: 5px; padding-left: 15px; position: relative; }
-/* Changed the bullet point to a snowflake! */
 .obsessions-box li::before { content: "❄"; color: #80ccff; position: absolute; left: 0; }
