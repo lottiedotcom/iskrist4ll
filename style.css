@@ -15,7 +15,7 @@ body::after {
     background: url('https://img1.picmix.com/output/stamp/normal/1/3/1/1/2621131_adae0.gif') repeat;
     pointer-events: none; 
     z-index: 8999; 
-    opacity: 0.5; 
+    opacity: 0.9; 
 }
 
 .hidden { display: none !important; }
